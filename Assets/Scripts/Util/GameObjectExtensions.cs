@@ -100,27 +100,4 @@ public static class GameObjectExtensions {
         byte b = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
         return new Color32(r,g,b, 255);
     }
-
-
-    // default tweens
-    //-------------------------------------------------------------------------
-    public static IEnumerator MoveTo(this MonoBehaviour v, EaseType easeType, float duration, Vector3 to) {
-        Vector3 from = v.transform.localPosition;
-
-        var ease = new EaseRunner(easeType, duration);
-        while (ease.IsPlaying()) {
-            v.transform.localPosition = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
-    public static IEnumerator ScaleTo(this MonoBehaviour v, EaseType easeType, float duration, Vector3 to) {
-        Vector3 from = v.transform.localScale;
-
-        var ease = new EaseRunner(easeType, duration);
-        while (ease.IsPlaying()) {
-            v.transform.localScale = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
-        }
-    }    
 }
