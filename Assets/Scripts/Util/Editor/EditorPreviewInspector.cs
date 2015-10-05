@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 [CustomEditor(typeof(EditorPreviewSupport), true)]
 [CanEditMultipleObjects]
-public class EditorPreviewEditor : Editor {
+public class EditorPreviewInspector : Editor {
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
          
