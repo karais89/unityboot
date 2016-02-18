@@ -15,23 +15,23 @@ public class AverageFilterVector3 {
      
     // public apis
     //-------------------------------------------------------------------------
-    public AverageFilterVector3(float avgSec = 1) { 
+    public AverageFilterVector3(int size) { 
         ready = false;
-        SetSize(avgSec);
+        SetSize(size);
     }
 
     public void Clear() {
-         ready = false;
+        ready = false;
         raw.Clear();
-         pos = 0;
-         sum = Vector3.zero;
-         avg = Vector3.zero;
+        pos = 0;
+        sum = Vector3.zero;
+        avg = Vector3.zero;
     }
 
-    public void SetFilterSize(float avgSec) {
-         ready = false;
+    public void SetFilterSize(int size) {
+        ready = false;
         raw.Clear();
-        SetSize(avgSec);
+        SetSize(size);
         pos = 0;
         sum = Vector3.zero;
         Filter(avg);
@@ -55,9 +55,8 @@ public class AverageFilterVector3 {
         return avg;
     }
 
-    void SetSize(float avgSec) {
-        filterSize = Mathf.RoundToInt(60f * avgSec);
-        filterSize = Mathf.Max(1, filterSize);
+    void SetSize(int size) {
+        filterSize = size;
     }
 }
 
@@ -75,23 +74,23 @@ public class AverageFilterFloat {
 
     // public apis
     //-------------------------------------------------------------------------
-    public AverageFilterFloat(float avgSec) { 
+    public AverageFilterFloat(int size) { 
         ready = false;
-        SetSize(avgSec);
+        SetSize(size);
     }
 
     public void Clear() {
-         ready = false;
+        ready = false;
         raw.Clear();
-         pos = 0;
-         sum = 0;
-         avg = 0;
+        pos = 0;
+        sum = 0;
+        avg = 0;
     }
 
-    public void SetFilterSize(float avgSec) {
-         ready = false;
+    public void SetFilterSize(int size) {
+        ready = false;
         raw.Clear();
-        SetSize(avgSec);
+        SetSize(size);
         pos = 0;
         sum = 0;
         Filter(avg);
@@ -115,8 +114,7 @@ public class AverageFilterFloat {
         return avg;
     }
 
-    void SetSize(float avgSec) {
-        filterSize = Mathf.RoundToInt(60f * avgSec);
-        filterSize = Mathf.Max(1, filterSize);
+    void SetSize(int size) {
+        filterSize = size;
     }
 }

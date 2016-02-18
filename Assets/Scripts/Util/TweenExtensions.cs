@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public static class TweenExtensions {
+    public static void PlayOnce(this MonoBehaviour v, Coroutine coroutine) {
+        if (coroutine != null) {
+            v.StopCoroutine(coroutine);
+        }
+    }
 
     public static IEnumerator MoveTo(this MonoBehaviour v, EaseType easeType, float duration, Vector3 to) {
         Vector3 from = v.transform.localPosition;
@@ -10,7 +14,7 @@ public static class TweenExtensions {
         var ease = new EaseRunner(easeType, duration);
         while (ease.IsPlaying()) {
             v.transform.localPosition = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -20,7 +24,7 @@ public static class TweenExtensions {
         var ease = new EaseRunner(easeType, duration);
         while (ease.IsPlaying()) {
             v.transform.localScale = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -30,7 +34,7 @@ public static class TweenExtensions {
         var ease = new EaseRunner(easeType, duration);
         while (ease.IsPlaying()) {
             v.transform.localEulerAngles = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -40,7 +44,7 @@ public static class TweenExtensions {
         var ease = new EaseRunner(easeType, duration);
         while (ease.IsPlaying()) {
             v.transform.localPosition = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -50,7 +54,7 @@ public static class TweenExtensions {
         var ease = new EaseRunner(easeType, duration);
         while (ease.IsPlaying()) {
             v.transform.localScale = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -60,7 +64,7 @@ public static class TweenExtensions {
         var ease = new EaseRunner(easeType, duration);
         while (ease.IsPlaying()) {
             v.transform.localEulerAngles = Vector3.Lerp(from, to, ease.Run());
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -76,11 +80,23 @@ public static class TweenExtensions {
             rect.xMax = Mathf.Lerp(from.xMax, to.xMax, process);
             rect.yMax = Mathf.Lerp(from.yMax, to.yMax, process);
             v.rect = rect;
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
-#if BOOT_NGUI_SUPPORT 
+    public static IEnumerator TintColorTo(this Material v, EaseType easeType, float duration, Color to) {
+        Color from = v.GetColor("_TintColor");
+
+        var ease = new EaseRunner(easeType, duration);
+        while (ease.IsPlaying()) {
+            Color color = Color.Lerp(from, to, ease.Run());
+            v.SetColor("_TintColor", color);
+            yield return null;
+        }
+    }
+
+
+#if BOOT_NGUI_SUPPORT
     public static IEnumerator AlphaTo(this UIPanel v, EaseType easeType, float duration, float to) {
         float from = v.alpha;
 
@@ -90,7 +106,7 @@ public static class TweenExtensions {
 #if UNITY_EDITOR
             NGUITools.SetDirty(v);
 #endif
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -103,7 +119,7 @@ public static class TweenExtensions {
 #if UNITY_EDITOR
             NGUITools.SetDirty(v);
 #endif
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -118,7 +134,7 @@ public static class TweenExtensions {
 #if UNITY_EDITOR
             NGUITools.SetDirty(v);
 #endif
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 #endif

@@ -94,10 +94,72 @@ public static class GameObjectExtensions {
         }
     }    
 
-    public static Color HexToColor(this MonoBehaviour v, string hex) {
+    public static Color HexToColor(this Color v, string hex) {
         byte r = byte.Parse(hex.Substring(0,2), System.Globalization.NumberStyles.HexNumber);
         byte g = byte.Parse(hex.Substring(2,2), System.Globalization.NumberStyles.HexNumber);
         byte b = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
         return new Color32(r,g,b, 255);
     }
+
+    public static bool HasTouch(this MonoBehaviour v) {
+        if (Application.platform == RuntimePlatform.IPhonePlayer || 
+            Application.platform == RuntimePlatform.Android) {
+            return Input.touchCount >= 1;
+        }
+
+        return Input.GetMouseButton(0);
+    }
+
+    public static bool HasTouch1(this MonoBehaviour v) {
+        if (Application.platform == RuntimePlatform.IPhonePlayer || 
+            Application.platform == RuntimePlatform.Android) {
+            return Input.touchCount == 1;
+        }
+
+        return Input.GetMouseButton(0);
+    }
+
+    public static bool HasTouch2(this MonoBehaviour v) {
+        if (Application.platform == RuntimePlatform.IPhonePlayer || 
+            Application.platform == RuntimePlatform.Android) {
+            return Input.touchCount == 2;
+        }
+
+        return false;
+    }
+
+    public static Vector3 GetTouchPosition1(this MonoBehaviour v) {
+        if (Application.platform == RuntimePlatform.IPhonePlayer || 
+            Application.platform == RuntimePlatform.Android) {
+            return Input.GetTouch(0).position;
+        }
+
+        return Input.mousePosition;
+    }
+
+#if BOOT_NGUI_SUPPORT
+    public static Vector3 GetUITouchPosition1(this MonoBehaviour v) {
+        UIRoot root = UIRoot.list[0];
+        float height = root.manualHeight;
+        float width = (Screen.width * height) / Screen.height;
+        float scale = height / Screen.height;
+
+        Vector3 pt = v.GetTouchPosition1() * scale;
+        pt.x -= width * 0.5f;
+        pt.y -= height * 0.5f;
+        return pt;
+    }    
+
+    public static float GetUIWidth(this MonoBehaviour v) {
+        UIRoot root = UIRoot.list[0];
+        float height = root.manualHeight;
+        return (Screen.width * height) / Screen.height;
+    }
+
+    public static void StopCoroutineSafe(this MonoBehaviour v, Coroutine coroutine) {
+        if (coroutine != null) {
+            v.StopCoroutine(coroutine);
+        }
+    }
+#endif    
 }

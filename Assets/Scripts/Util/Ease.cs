@@ -59,7 +59,6 @@ public class EaseRunner {
     public float Run() {
         deltaTimes += Time.deltaTime;
         deltaTimes = Mathf.Min(duration, deltaTimes);
-        float oldProcess = process;
         process = deltaTimes / duration;
         return Ease.Run(easeType, 0, 1, process);
     }
@@ -361,6 +360,14 @@ public class Ease {
      * Same functionality but using Vector3s to define curve.
      */
     public static IEnumerable<Vector3> NewCatmullRom(Vector3[] points, int slices, bool loop) {
+        return NewCatmullRom<Vector3>(points, Identity, slices, loop);
+    }
+
+    /**
+     * A Vector3[] variation of the Transform[] NewCatmullRom() function.
+     * Same functionality but using Vector3s to define curve.
+     */
+    public static IEnumerable<Vector3> NewCatmullRom(List<Vector3> points, int slices, bool loop) {
         return NewCatmullRom<Vector3>(points, Identity, slices, loop);
     }
  

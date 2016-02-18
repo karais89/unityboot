@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 #if BOOT_NGUI_SUPPORT
+[ExecuteInEditMode]
 public class UIArranger : MonoBehaviour {
     public enum AnchroType {
         Center,
@@ -16,16 +17,11 @@ public class UIArranger : MonoBehaviour {
     }
 
     public AnchroType anchor;
-    public AnchroType to;
     public int leftPadding = 15;
     public int rightPadding = 15;
     public int topPadding = 15;
     public int bottomPadding = 15;
-    public bool onlyActive = true;
     public bool touchBubbling = false;
-    public Vector3 touchCenter = Vector3.zero;
-    public Vector3 touchSize = Vector3.one;
-    public string filter = "";
 
     public bool autoScale = false;
     private float defaultRatio = 0.625f; // 10 : 16
@@ -46,6 +42,11 @@ public class UIArranger : MonoBehaviour {
         Arrange();
     }
 
+#if UNITY_EDITOR
+    void Update() {
+        Arrange();
+    }
+#endif
     public bool IsTouchPointIn() {
         if (touchBubbling) {
             return false;
@@ -62,12 +63,7 @@ public class UIArranger : MonoBehaviour {
 
     public bool IsPointInRect(float x, float y) {
         Rect rect = GetChildSize();
-        Vector3 center = transform.localPosition + touchCenter;
-
-        rect.xMin *= touchSize.x;
-        rect.xMax *= touchSize.x;
-        rect.yMin *= touchSize.y;
-        rect.yMax *= touchSize.y;
+        Vector3 center = transform.localPosition;
         rect.xMin += center.x;
         rect.yMin += center.y;
         rect.xMax += center.x;
@@ -126,12 +122,12 @@ public class UIArranger : MonoBehaviour {
                 break;
         }
 
-        UIRoot root = (UIRoot)GameObject.FindObjectOfType(typeof(UIRoot));
+        UIRoot root = UIRoot.list[0];
         float halfWidth = (Screen.width * ((float)root.activeHeight/Screen.height)) / 2;
         float halfHeight = root.activeHeight / 2;
 
         Vector3 position = Vector3.zero;
-        switch(to) {
+        switch(anchor) {
             case AnchroType.Left:
                 position.x = -halfWidth;
                 break;
@@ -207,20 +203,12 @@ public class UIArranger : MonoBehaviour {
 
         UIWidget[] widgets = GetComponentsInChildren<UIWidget>();
         foreach (UIWidget widget in widgets) {
-            if (onlyActive) {
-                if (widget.gameObject.activeSelf == false) {
-                    continue;
-                }
+            if (widget.gameObject.activeSelf == false) {
+                continue;
             }
 
             if (widget.color.a == 0) {
                 continue;
-            }
-
-            if (filter != "") {
-                if (widget.gameObject.name.IndexOf(filter) != -1) {
-                    continue;
-                }
             }
 
             Vector3 scale = getScale(widget.transform);
